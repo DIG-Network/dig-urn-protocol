@@ -1,0 +1,38 @@
+# dig-urn-protocol — the canonical DIG content-addressing + server-untrusted verification contract.
+#
+# ONE ecosystem definition of how a DIG URN names content and how a browser (or any blind client)
+# turns opaque gateway bytes into verified plaintext, fail-closed. It OWNS:
+#   - the `urn:dig:` scheme + byte-level grammar (parse / canonical / retrieval-key derivation),
+#   - the resolution INTERFACE (`UrnResolver` trait + `ResolveOutcome` / `ResolveError`),
+#   - the browser content-VERIFICATION contract (gate-then-decrypt, the u64-bounded chunk split,
+#     rootless-URN rejection on the blind tier) as an interface over INJECTED crypto primitives.
+#
+# LEAF CRATE by design: it has NO `dig-*` dependencies and NO transport (reqwest/tokio) — the merkle
+# and AES primitives are supplied by the caller (digstore_core), so this crate reimplements no crypto
+# and can never skew from the canonical read-crypto. See SPEC.md.
+[package]
+name = "dig-urn-protocol"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.75.0"
+license = "Apache-2.0 OR MIT"
+description = "Canonical DIG Network content-addressing + server-untrusted verification contract: the urn:dig: scheme and byte-level grammar (parse / canonical / SHA-256 retrieval-key), the UrnResolver resolution interface, and the fail-closed browser content-verification contract (gate-then-decrypt, u64-bounded chunk split, rootless-URN rejection on the blind tier) over injected merkle/AES primitives."
+repository = "https://github.com/DIG-Network/dig-urn-protocol"
+readme = "README.md"
+keywords = ["dig", "urn", "content-addressing", "merkle", "verification"]
+categories = ["cryptography", "parser-implementations"]
+
+[dependencies]
+# SHA-256 for the retrieval key and the content leaf hash (the ONLY crypto this leaf crate performs;
+# merkle-path folding and AES decryption are injected by the caller — see `ContentCrypto`).
+sha2 = "0.10"
+# Lowercase-hex encode/decode for store-id / root-hash / retrieval-key.
+hex = "0.4"
+# Typed, catalogued error taxonomy (§6.2 stable error codes).
+thiserror = "1"
+# Serialize the parsed URN + verification shapes (agent-consumable, and for the KAT harness).
+serde = { version = "1", features = ["derive"] }
+
+[dev-dependencies]
+# Parse the frozen conformance + golden inclusion-proof vector files.
+serde_json = "1"

@@ -1,0 +1,96 @@
+{
+  "_comment": "Golden inclusion-proof vectors for dig-urn-protocol. leaf_hex = SHA-256(ciphertext) (verify rule 2, resource_leaf). chunk_ranges = the u64-bounded split plan (verify rule 6). Deterministic; regenerate by hashing the described ciphertext.",
+  "leaves": [
+    {
+      "name": "empty",
+      "ciphertext_hex": "",
+      "leaf_hex": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "single_byte",
+      "ciphertext_hex": "01",
+      "leaf_hex": "4bf5122f344554c53bde2ebb8cd2b7e3d1600ad631c385a5d7cce23c7785459a"
+    },
+    {
+      "name": "eight_ones",
+      "ciphertext_hex": "0101010101010101",
+      "leaf_hex": "04abc8821a06e5a30937967d11ad10221cb5ac3b5273e434f1284ee87129a061"
+    },
+    {
+      "name": "zero_to_fifteen",
+      "ciphertext_hex": "000102030405060708090a0b0c0d0e0f",
+      "leaf_hex": "be45cb2605bf36bebde684841a28f0fd43c69850a3dce5fedba69928ee3a8991"
+    }
+  ],
+  "chunk_ranges": [
+    {
+      "name": "empty_lens_single_chunk",
+      "ciphertext_len": 10,
+      "chunk_lens": [],
+      "ranges": [
+        [
+          0,
+          10
+        ]
+      ]
+    },
+    {
+      "name": "two_chunks",
+      "ciphertext_len": 10,
+      "chunk_lens": [
+        3,
+        7
+      ],
+      "ranges": [
+        [
+          0,
+          3
+        ],
+        [
+          3,
+          10
+        ]
+      ]
+    },
+    {
+      "name": "three_chunks",
+      "ciphertext_len": 6,
+      "chunk_lens": [
+        1,
+        2,
+        3
+      ],
+      "ranges": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          3,
+          6
+        ]
+      ]
+    },
+    {
+      "name": "total_mismatch_rejected",
+      "ciphertext_len": 10,
+      "chunk_lens": [
+        999
+      ],
+      "ranges": null
+    },
+    {
+      "name": "u64_overflow_rejected",
+      "ciphertext_len": 10,
+      "chunk_lens": [
+        2147483658,
+        2147483648
+      ],
+      "ranges": null
+    }
+  ]
+}
